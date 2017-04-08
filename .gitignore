@@ -1,0 +1,9 @@
+.vscode
+
+*.pyc
+
+CBIR/*
+!CBIR/images
+
+__pycache__
+webserver*
