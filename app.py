@@ -4,7 +4,7 @@ from flask import Flask, request, redirect, url_for, send_from_directory
 from werkzeug import secure_filename
 
 UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','ppm'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -22,7 +22,7 @@ def upload_file():
         if 'file' not in request.files:
             print ('No file part')
             return redirect(request.url)
-        print ("POST request", request.files)
+        print ("POST request", request.files)   
         file = request.files['file']
         if file and allowed_file(file.filename):
             print '**found file', file.filename
@@ -31,20 +31,34 @@ def upload_file():
             # for browser, add 'redirect' function on top of 'url_for'
             return url_for('uploaded_file',
                                     filename=filename)
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type=file name=file>
-         <input type=submit value=Upload>
-    </form>
-    '''
+    # return '''
+    # <!doctype html>
+    # <title>Upload new File</title>
+    # <h1>Upload new File</h1>
+    # <form action="" method=post enctype=multipart/form-data>
+    #   <p><input type=file name=file>
+    #      <input type=submit value=Upload>
+    # </form>
+    # '''
+
+    return "Image is compatible"
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],
                                filename)
 
+@app.route('/hello', methods=['GET', 'POST'])
+def hello_world():
+    print (request.method)
+    if request.method == 'GET':
+        msg = "Hi!! you sent GET Req"
+        return msg
+    if request.method == 'POST':
+        args = request.json
+        print (args)
+        msg = "Hi!! you sent POST Req"
+        return msg
+
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run(debug=True, host='0.0.0.0')

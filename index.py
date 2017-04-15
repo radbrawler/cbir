@@ -1,6 +1,9 @@
 # import the necessary packages
 from colordescriptor import ColorDescriptor
+from hu import ShapeDescriptor
+from zernika import ZernikeMoments
 import argparse
+
 import glob
 import cv2
 
@@ -12,21 +15,21 @@ ap.add_argument("-i", "--index", required = True,
 	help = "Path to where the computed index will be stored")
 args = vars(ap.parse_args())
 
-# initialize the color descriptor
-cd = ColorDescriptor((8, 12, 3))
+# initialize the Shape descriptor
+cd = ColorDescriptor(21)
 
 # open the output index file for writing
 output = open(args["index"], "w")
 
 # use glob to grab the image paths and loop over them
-for imagePath in glob.glob(args["dataset"] + "/*.jpg"):
+for imagePath in glob.glob(args["dataset"] + "/*.png"):
 	# extract the image ID (i.e. the unique filename) from the image
 	# path and load the image itself
 	imageID = imagePath[imagePath.rfind("/") + 1:]
 	image = cv2.imread(imagePath)
 
 	# describe the image
-	features = cd.describe(image)
+	features = cd.describe()
 
 	# write the features to file
 	features = [str(f) for f in features]

@@ -1,5 +1,9 @@
 # import the necessary packages
 from colordescriptor import ColorDescriptor
+import numpy as np
+from pyimagesearch.zernikemoments import ZernikeMoments
+from HogDescriptor import HogDescriptor
+from hu import ShapeDescriptor
 from searcher import Searcher
 import argparse
 import cv2
@@ -15,10 +19,32 @@ ap.add_argument("-r", "--result-path", required=True,
 args = vars(ap.parse_args())
 
 # initialize the image descriptor
-cd = ColorDescriptor((8, 12, 3))
-
+#cd = ShapeDescriptor()
+#cd = ZernikeMoments(50)
+#cd = HogDescriptor()
+cd = ColorDescriptor()
 # load the query image and describe it
 query = cv2.imread(args["query"])
+query = cv2.cvtColor(query, cv2.COLOR_BGR2GRAY)
+	# pad the image with extra white pixels to ensure the
+	# edges of the pokemon are not up against the borders
+	# of the image
+#query = cv2.copyMakeBorder(query, 15, 15, 15, 15,
+#	cv2.BORDER_CONSTANT, value = 255)
+
+	# invert the image and threshold it
+#thresh = cv2.bitwise_not(query)
+#thresh[thresh > 0] = 255
+
+	# initialize the outline image, find the outermost
+	# contours (the outline) of the pokemone, then draw
+	# it
+#outline = np.zeros(query.shape, dtype = "uint8")
+#(cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, 
+#	cv2.CHAIN_APPROX_SIMPLE)
+#cnts = sorted(cnts, key = cv2.contourArea, reverse = True)[0]
+#cv2.drawContours(outline, [cnts], -1, 255, -1)
+
 features = cd.describe(query)
 
 # perform the search

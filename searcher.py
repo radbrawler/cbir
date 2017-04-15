@@ -37,6 +37,7 @@ class Searcher:
 		# sort our results, so that the smaller distances (i.e. the
 		# more relevant images are at the front of the list)
 		results = sorted([(v, k) for (k, v) in results.items()])
+		print (results[:limit])
 
 		# return our (limited) results
 		return results[:limit]
